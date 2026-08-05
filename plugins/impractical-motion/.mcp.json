@@ -1,0 +1,6 @@
+{
+  "impractical": {
+    "command": "npx",
+    "args": ["--yes", "@impractical-ai/motion", "mcp"]
+  }
+}

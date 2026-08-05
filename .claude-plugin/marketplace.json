@@ -1,0 +1,20 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "impractical",
+  "description": "Claude Code plugins for Impractical creative tools",
+  "owner": {
+    "name": "Openpod"
+  },
+  "plugins": [
+    {
+      "name": "impractical-motion",
+      "description": "Create, inspect, refine, and export studio-quality product videos through Impractical Motion.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Openpod"
+      },
+      "category": "design",
+      "source": "./plugins/impractical-motion"
+    }
+  ]
+}
