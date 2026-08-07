@@ -1,7 +1,7 @@
 {
   "impractical": {
     "command": "npx",
-    "args": ["--yes", "@impractical-ai/motion", "mcp"],
+    "args": ["--yes", "@impractical-ai/motion@latest", "mcp"],
     "timeout": 600000
   }
 }
