@@ -53,6 +53,7 @@ If they gave a brand URL and no kit exists yet:
 
     brand_list
     brand_extract  { url: "https://example.com" }
+    brand_extract  { jobId: "<returned run id>", wait: true }
 
 Then scaffold the project:
 
@@ -72,8 +73,9 @@ A scene is two files, and both must exist for the preview to build:
 
 Write them with `write_draft_files` (whole files) or `edit_draft_file` (exact
 string replacement — prefer this for revisions). Every save rebuilds the
-preview and **returns the build error if your code does not compile** — that is
-your compile loop, so read it and fix rather than guessing.
+preview and returns the committed revision plus its build job id immediately.
+Follow that id with `job_status { jobIds: ["..."], wait: true }`; that result is
+your compile loop, so read and fix any build error rather than guessing.
 
 Rules that matter:
 
@@ -168,10 +170,31 @@ again. This is the difference between shipping a video and shipping a guess.
 ## 5. Export and hand off
 
     export_video  { draftId: "..." }
+    job_status    { jobIds: ["<returned job id>"], wait: true }
     studio_link   { projectId: "...", slug: "..." }
 
 Always give the user the studio link — that is where they watch the cuts and
 tweak visually. The export URL expires, so only export once they are happy.
+
+## Timeouts and lost acknowledgements
+
+Build, export, and brand-extraction calls return their job or run id before
+waiting. Continue build/export ids with `job_status`, and continue a brand run
+with `brand_extract { jobId, wait: true }` (never the URL again). If the MCP
+client kills any call and shows only a timeout, the mutation may still have
+committed even though its acknowledgement was lost.
+**Never blindly retry a mutating or metered call.** Verify state first:
+
+- After `write_draft_files` / `edit_draft_file`, use `list_draft_files` and
+  `read_draft_file` to confirm the intended revision and source.
+- After an export or other project mutation, use `get_project` / `list_projects`
+  to check whether it already started or completed.
+- After `brand_extract`, continue its returned id with `brand_extract { jobId, wait: true }`. If the
+  start acknowledgement was lost, check `brand_list` / `brand_get` before
+  starting another extraction, especially when `reextract: true`.
+
+Retry only when those reads prove the mutation did not commit. Otherwise
+continue from the state you observed; a duplicate edit or export wastes quota.
 
 ## The personal motion profile
 
