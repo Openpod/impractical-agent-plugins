@@ -13,13 +13,15 @@ source code lives in the cloud, never in the user's project directory.
 ## 0. Setup check (once per session)
 
 Call the `account_status` tool (`whoami` is its legacy alias). If the
-Impractical tools are not available, the Claude plugin is not connected. Tell
-the user to run:
+Impractical tools are not available, the current coding agent is not connected.
+Tell the user to run:
 
-    npx --yes @impractical-ai/motion setup --claude
+    npx --yes @impractical-ai/motion setup --agent
 
-Then ask them to run `/reload-plugins` and type `continue`. If the weekly quota
-is exhausted, call `upgrade` to give the user the authenticated billing page.
+Then ask them to restart or reload their coding agent and type `continue`.
+Claude Code users who specifically want the full plugin can run the same command
+with `--claude` instead. If the weekly quota is exhausted, call `upgrade` to give
+the user the authenticated billing page.
 
 ## 1. Read the engine before you write anything
 
